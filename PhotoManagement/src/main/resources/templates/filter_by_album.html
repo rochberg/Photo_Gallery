@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Photos From Album'+ ${albumId}"></title>
+</head>
+<body>
+<div>
+    <!--    <header id="header">-->
+    <!--        <div class="form-group col-md-9">-->
+    <!--            <label for="photos" class="col-form-label">Choose Album</label>-->
+    <!--            <select th:field="*{photos}" class="form-control" id="photos">-->
+    <!--                <option th:each="photo : ${photos}" th:text="${photos}"></option>-->
+    <!--            </select>-->
+    <!--        </div>-->
+    <!--        <button type="button" align="center" th:onclick="|window.location.href='/filterByAlbum/'|">Choose Album</button>-->
+    <!--    </header>-->
+    <h1 th:text="'Photos from Album'+ ${albumId}"></h1>
+    <a href="/new">Create New Photo</a>
+    <br>
+    <a href="/deleteAll">Delete All Photos From Repository</a>
+    <br>
+    <a href="/index">Return To View All Photos</a>
+
+    <br/><br/>
+    <table border="1" cellpadding="10">
+        <thead>
+        <tr>
+            <th>Photo ID</th>
+            <th>Title</th>
+            <th>Album Number</th>
+            <th>Size</th>
+            <th>URL Address</th>
+            <th>Local Path</th>
+            <th>Download Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="photo : ${photosByAlbum}">
+            <td th:text="${photo.id}">Photo ID</td>
+            <td th:text="${photo.title}">Title</td>
+            <td th:text="${photo.albumId}">Album Number</td>
+            <td th:text="${photo.size}">Size</td>
+            <td th:text="${photo.url}">URL Address</td>
+            <td th:text="${photo.path}">Local Path</td>
+            <td th:text="${photo.getDownloadedDate()}">Download Date</td>
+            <td>
+                <a th:href="@{'/edit/' + ${photo.id}}">Edit</a>
+                <a th:href="@{'/delete/' + ${photo.id}}">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!--    <script th:src="@{/js/jquery.min.js}"></script>-->
+    <!--    <script th:src="@{/js/jquery.poptrox.min.js}"></script>-->
+    <!--    <script th:src="@{/js/browser.min.js}"></script>-->
+    <!--    <script th:src="@{/js/breakpoints.min.js}"></script>-->
+    <!--    <script th:src="@{/js/util.js}"></script>-->
+    <!--    <script th:src="@{/js/main.js}"></script>-->
+</div>
+</body>
+</html>
