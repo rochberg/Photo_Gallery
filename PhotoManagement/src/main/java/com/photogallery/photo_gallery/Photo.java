@@ -80,7 +80,7 @@ public class Photo {
     }
 
     public String getPathString(){
-        return path.toString();
+        return path;
     }
 
     public void setPath(String path) {

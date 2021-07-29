@@ -1,11 +1,29 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8"/>
-    <title>Create New Photo</title>
+    <title>Photo Gallery</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <noscript>
+        <link rel="stylesheet" th:href="@{/css/noscript.css}"/>
+    </noscript>
+
 </head>
-<body>
+<body class="is-preload">
+<header id="header">
+    <div class="dropup">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-flip="true" data-toggle="dropdown">Dropdown Example
+            <span class="caret"></span></button>
+        <ul class="dropdown-menu">
+            <a th:each="album : ${albums}" th:href="@{/filterByAlbum?albumId={album}(album=${album})}"><li th:text="${album}"></li></a>
+        </ul>
+    </div>
+</header>
+
 <div align="center">
     <h1>Create New Photo</h1>
     <br/>
@@ -19,11 +37,11 @@
             </tr>
             <tr>
                 <td>URL Address:</td>
-                <td><input type="text" th:field="*{url}"/></td>
+                <td><input type="url" th:field="*{url}"/></td>
             </tr>
             <tr>
                 <td>Album Number:</td>
-                <td><input type="text" th:field="*{albumId}"/></td>
+                <td><input type="number" th:field="*{albumId}"/></td>
             </tr>
             <tr>
                 <td colspan="2">

@@ -7,15 +7,6 @@
 </head>
 <body>
 <div>
-    <!--    <header id="header">-->
-    <!--        <div class="form-group col-md-9">-->
-    <!--            <label for="photos" class="col-form-label">Choose Album</label>-->
-    <!--            <select th:field="*{photos}" class="form-control" id="photos">-->
-    <!--                <option th:each="photo : ${photos}" th:text="${photos}"></option>-->
-    <!--            </select>-->
-    <!--        </div>-->
-    <!--        <button type="button" align="center" th:onclick="|window.location.href='/filterByAlbum/'|">Choose Album</button>-->
-    <!--    </header>-->
     <h1 th:text="'Photos from Album'+ ${albumId}"></h1>
     <a href="/new">Create New Photo</a>
     <br>

@@ -13,6 +13,9 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 
 import java.io.*;
 import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.FileChannel;
+import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -29,11 +32,20 @@ public class InitPhotoService {
     @Value("${photosDir}")
     private String photosDir;
 
+    @Value("${resourcesDirPath}")
+    private String resourcesDirPath;
+
+    @Value("${photos.dir}")
+    private String photos_dir;
+
+
     public InitPhotoService(){
         once = new ExecuteOnce();
     }
 
     public Photo[] init(){
+        /* makes sure you execute initialization once */
+
         once.run(new Runnable() {
             @Override
             public void run() {
@@ -59,9 +71,11 @@ public class InitPhotoService {
     }
 
     public void downloadPhotos() throws IOException {
-        String path = dirPath();
+        dirPath();
         for (Photo photo : photos) {
-            photo.setPath(path + "/photo" + photo.getId() + ".jpg");
+            photo.setPath(photos_dir+"/photo" +photo.getId() + ".jpg");
+            System.out.println("sownlo:\t"+photo.getPathString());
+//            photo.setPath(path + "/photo"+photo.getId()+".jpg");
             savePhotoFromURL(photo);
         }
     }
@@ -76,20 +90,23 @@ public class InitPhotoService {
 
     public void savePhotoFromURL(Photo photo) throws IOException {
         URL imageUrl = new URL(photo.getUrl());
+        ReadableByteChannel readableByteChannel = Channels.newChannel(imageUrl.openStream());
+        FileOutputStream fileOutputStream = new FileOutputStream(photo.getPathString());
+        FileChannel fileChannel = fileOutputStream.getChannel();
+        fileOutputStream.getChannel()
+                .transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
 
-
-
-        InputStream inputStream = imageUrl.openStream();
-        OutputStream outputStream = new FileOutputStream(photo.getPathString());
-
-        byte[] byteArray = new byte[2048];
-        int length;
-
-        while ((length = inputStream.read(byteArray)) != -1) {
-            outputStream.write(byteArray, 0, length);
-        }
-        inputStream.close();
-        outputStream.close();
+//        InputStream inputStream = imageUrl.openStream();
+//        OutputStream outputStream = new FileOutputStream(photo.getPathString());
+//
+//        byte[] byteArray = new byte[2048];
+//        int length;
+//
+//        while ((length = inputStream.read(byteArray)) != -1) {
+//            outputStream.write(byteArray, 0, length);
+//        }
+//        inputStream.close();
+//        outputStream.close();
         addAttributes(photo);
     }
 
@@ -97,13 +114,38 @@ public class InitPhotoService {
         photo.setDownloadedDate();
         File f = new File(photo.getPathString());
         photo.setSize(f.length());
+
+        /* for later downloading use (to client side) */
         String serveFile = MvcUriComponentsBuilder.fromMethodName(PhotosController.class,
                 "serveFile", photo.getPath().getFileName().toString()).build().toUri().toString();
         photo.setDownloadPath(serveFile.toString());
+//        System.out.println(Path.of(photos_dir).resolve(relativizePath(photo.getPathString())));
+//        photo.setPath(Path.of(photos_dir).resolve(relativizePath(photo.getPathString())));
+
     }
 
-    public Path load(String filename) {
-        return Path.of(photosDir).resolve(filename);
+    public Path resolvePath(String filename) {
+        return Paths.get(photosDir).resolve(filename);
+    }
+
+    public Photo changePath(Photo photo){
+        System.out.println("dir:\t"+photos_dir);
+        System.out.println("photo:\t"+photo.getPathString());
+//        System.out.println(Path.of(photos_dir).resolve(Path.of(photo.getPathString())).toString());
+//        photo.setPath(Path.of(photos_dir).resolve(relativizePath(photo.getPathString())));
+        return photo;
+    }
+
+
+    public Path relativizePath(String filename){
+
+        /*System.out.println(Path.of(resourcesDirPath).relativize(Path.of(filename))); */
+
+        Path p = Path.of(photosDir).relativize(Path.of(filename));
+        System.out.println("relatavize:  "+p);
+//        return  Path.of(filename).relativize(Paths.get(photosDir)).normalize();
+//        return  Path.of(resourcesDirPath).relativize(Path.of(filename));
+        return p;
     }
 
 }

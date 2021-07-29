@@ -2,51 +2,90 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Photo Gallery</title>
-    <meta charset="utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <noscript>
+        <link rel="stylesheet" th:href="@{/css/noscript.css}"/>
+    </noscript>
+
 </head>
-<body>
-<div>
-    <h1>Photo List</h1>
-    <a href="/new">Add New Photo</a>
-    <br>
-    <a href="/deleteAll">Delete All Photos From Repo</a>
-    <br>
-    <a href="/">Initialize and Load Repository With Pre-defined Photos</a>
-    <br>
-    <div th:each="num : ${album_options}">
-        <a th:href="'/filter_by_album?albumId='+${num}" th:text="'Show Photos From Album '+ ${num}"></a>
+
+<body class="is-preload">
+<div id="wrapper">
+    <header id="header">
+        <div class="dropup">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-flip="true" data-toggle="dropdown">Choose Album
+                <span class="caret"></span></button>
+            <ul class="dropdown-menu">
+                <a th:each="album : ${album_options}" th:href="@{/filterByAlbum?albumId={album}(album=${album})}"><li th:text="'Album '+${album}"></li></a>
+            </ul>
+        </div>
+    </header>
+    <div id="main">
+        <article class="thumb" th:each="photo : ${photos}">
+            <a class="image" th:href="@{/{path}(path=${photo.path})}" ><img th:src="@{/{path}(path=${photo.path})}"
+                                                                            alt=""/></a>
+            <h1 th:text="${photo.getTitle()}"></h1>
+        </article>
     </div>
 
-    <br/><br/>
-    <table border="1" cellpadding="10">
-        <thead>
-        <tr>
-            <th>Photo ID</th>
-            <th>Title</th>
-            <th>Album Number</th>
-            <th>Size</th>
-            <th>URL Address</th>
-            <th>Local Path</th>
-            <th>Download Date</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="photo : ${photos}">
-            <td th:text="${photo.id}">Photo ID</td>
-            <td th:text="${photo.title}">Title</td>
-            <td th:text="${photo.albumId}">Album Number</td>
-            <td th:text="${photo.size}">Size</td>
-            <td th:text="${photo.url}">URL Address</td>
-            <td th:text="${photo.path}">Local Path</td>
-            <td th:text="${photo.getDownloadedDate()}">Download Date</td>
-            <td>
-                <a th:href="@{'/edit/' + ${photo.id}}">Edit</a>
-                <a th:href="@{'/delete/' + ${photo.id}}">Delete</a>
-                <a th:href="${photo.downloadPath}">Download</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
+    <footer id="footer" class="panel">
+        <div class="inner split">
+
+        </div>
+    </footer>
+
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/jquery.poptrox.min.js}"></script>
+    <script th:src="@{/js/browser.min.js}"></script>
+    <script th:src="@{/js/breakpoints.min.js}"></script>
+    <script th:src="@{/js/util.js}"></script>
+    <script th:src="@{/js/main.js}"></script>
 </body>
 </html>
+
+<!--    <a href="/new">Add New Photo</a>-->
+<!--    <br>-->
+<!--    <a href="/deleteAll">Delete All Photos From Repo</a>-->
+<!--    <br>-->
+
+<!--    <a href="/">Initialize and Load Repository With Pre-defined Photos</a>-->
+<!--    <div th:each="num : ${album_options}">-->
+<!--        <a th:href="'/filter_by_album?albumId='+${num}" th:text="'Show Photos From Album '+ ${num}"></a>-->
+<!--    </div>-->
+
+<!--    <br/><br/>-->
+<!--    <table border="1" cellpadding="10">-->
+<!--        <thead>-->
+<!--        <tr>-->
+<!--            <th>Photo ID</th>-->
+<!--            <th>Title</th>-->
+<!--            <th>Album Number</th>-->
+<!--            <th>Size</th>-->
+<!--            <th>URL Address</th>-->
+<!--            <th>Local Path</th>-->
+<!--            <th>Download Date</th>-->
+<!--        </tr>-->
+<!--        </thead>-->
+<!--        <tbody>-->
+<!--        <tr th:each="photo : ${photos}">-->
+<!--            <td th:text="${photo.id}">Photo ID</td>-->
+<!--            <td th:text="${photo.title}">Title</td>-->
+<!--            <td th:text="${photo.albumId}">Album Number</td>-->
+<!--            <td th:text="${photo.size}">Size</td>-->
+<!--            <td th:text="${photo.url}">URL Address</td>-->
+<!--            <td th:text="${photo.path}">Local Path</td>-->
+<!--            <td th:text="${photo.getDownloadedDate()}">Download Date</td>-->
+<!--            <td>-->
+<!--                <a th:href="@{'/edit/' + ${photo.id}}">Edit</a>-->
+<!--                <a th:href="@{'/delete/' + ${photo.id}}">Delete</a>-->
+<!--                <a th:href="${photo.downloadPath}">Download</a>-->
+<!--            </td>-->
+<!--        </tr>-->
+<!--        </tbody>-->
+<!--    </table>-->
+<!--</div>-->
