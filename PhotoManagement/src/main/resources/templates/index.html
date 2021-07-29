@@ -3,24 +3,9 @@
 <head>
     <title>Photo Gallery</title>
     <meta charset="utf-8"/>
-    <!--    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>-->
-    <!--    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>-->
-    <!--    <link rel="stylesheet" th:href="@{/css/main.css}"/>-->
-    <!--    <noscript>-->
-    <!--        <link rel="stylesheet" th:href="@{/css/noscript.css}"/>-->
-    <!--    </noscript>-->
 </head>
 <body>
 <div>
-    <!--    <header id="header">-->
-    <!--        <div class="form-group col-md-9">-->
-    <!--            <label for="photos" class="col-form-label">Choose Album</label>-->
-    <!--            <select th:field="*{photos}" class="form-control" id="photos">-->
-    <!--                <option th:each="photo : ${photos}" th:text="${photos}"></option>-->
-    <!--            </select>-->
-    <!--        </div>-->
-    <!--        <button type="button" align="center" th:onclick="|window.location.href='/filterByAlbum/'|">Choose Album</button>-->
-    <!--    </header>-->
     <h1>Photo List</h1>
     <a href="/new">Add New Photo</a>
     <br>
@@ -30,10 +15,6 @@
     <br>
     <div th:each="num : ${album_options}">
         <a th:href="'/filter_by_album?albumId='+${num}" th:text="'Show Photos From Album '+ ${num}"></a>
-<!--        <form action="#" th:action="@{/filter_by_album/} + ${num}" method="get">-->
-<!--            <button th:id="'photos_from_album' + ${num}" type="submit" th:text="'Show Photos From Album '+ ${num}">-->
-<!--            </button>-->
-<!--        </form>-->
     </div>
 
     <br/><br/>
@@ -61,18 +42,11 @@
             <td>
                 <a th:href="@{'/edit/' + ${photo.id}}">Edit</a>
                 <a th:href="@{'/delete/' + ${photo.id}}">Delete</a>
-                <a th:href="@{'/downloadPhoto/'+${photo.id}}">Download</a>
+                <a th:href="${photo.downloadPath}">Download</a>
             </td>
         </tr>
         </tbody>
     </table>
-
-    <!--    <script th:src="@{/js/jquery.min.js}"></script>-->
-    <!--    <script th:src="@{/js/jquery.poptrox.min.js}"></script>-->
-    <!--    <script th:src="@{/js/browser.min.js}"></script>-->
-    <!--    <script th:src="@{/js/breakpoints.min.js}"></script>-->
-    <!--    <script th:src="@{/js/util.js}"></script>-->
-    <!--    <script th:src="@{/js/main.js}"></script>-->
 </div>
 </body>
 </html>

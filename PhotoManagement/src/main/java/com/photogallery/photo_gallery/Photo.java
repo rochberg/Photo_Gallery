@@ -2,16 +2,9 @@ package com.photogallery.photo_gallery;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.context.annotation.Bean;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.stereotype.Component;
-import org.springframework.util.SimpleIdGenerator;
 
 import javax.persistence.*;
-//import javax.validation.constraints.NotNull;
 import java.nio.file.Path;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 @Entity
@@ -32,6 +25,7 @@ public class Photo {
     private Date downloadDate;
     private Long size;
     private String path;
+    private String downloadPath;
 
     public Photo() {
     }
@@ -56,14 +50,6 @@ public class Photo {
     public String toString() {
         return this.url;
     }
-
-//    public AlbumNum getAlbumId() {
-//        return albumId;
-//    }
-//
-//    public void setAlbumId(int albumId) {
-//        this.albumId = new AlbumNum(albumId);
-//    }
 
     public int getAlbumId() {
         return albumId;
@@ -119,6 +105,14 @@ public class Photo {
 
     public void setSize(Long size) {
         this.size = size;
+    }
+
+    public String getDownloadPath() {
+        return downloadPath;
+    }
+
+    public void setDownloadPath(String downloadPath) {
+        this.downloadPath = downloadPath;
     }
 
 

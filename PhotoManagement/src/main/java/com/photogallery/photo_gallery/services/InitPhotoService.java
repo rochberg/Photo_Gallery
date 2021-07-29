@@ -1,19 +1,15 @@
 package com.photogallery.photo_gallery.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-//import main.java.com.photogallery.photo_gallery.ExecuteOnce;
-//import main.java.com.photogallery.photo_gallery.Photo;
-//import main.java.com.photogallery.photo_gallery.PhotoRepository;
-//import main.java.com.photogallery.photo_gallery.PhotosController;
 import com.photogallery.photo_gallery.ExecuteOnce;
 import com.photogallery.photo_gallery.Photo;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.photogallery.photo_gallery.PhotosController;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 import java.io.*;
 import java.net.URL;
@@ -80,6 +76,9 @@ public class InitPhotoService {
 
     public void savePhotoFromURL(Photo photo) throws IOException {
         URL imageUrl = new URL(photo.getUrl());
+
+
+
         InputStream inputStream = imageUrl.openStream();
         OutputStream outputStream = new FileOutputStream(photo.getPathString());
 
@@ -98,6 +97,13 @@ public class InitPhotoService {
         photo.setDownloadedDate();
         File f = new File(photo.getPathString());
         photo.setSize(f.length());
-        photo.setPath(Path.of(System.getProperty("user.dir")).relativize(photo.getPath()));
+        String serveFile = MvcUriComponentsBuilder.fromMethodName(PhotosController.class,
+                "serveFile", photo.getPath().getFileName().toString()).build().toUri().toString();
+        photo.setDownloadPath(serveFile.toString());
     }
+
+    public Path load(String filename) {
+        return Path.of(photosDir).resolve(filename);
+    }
+
 }

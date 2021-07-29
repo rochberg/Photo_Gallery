@@ -1,17 +1,16 @@
 package com.photogallery.photo_gallery;
 
-//import com.photogallery.photo_gallery.services.InitPhotoService;
-//import com.photogallery.photo_gallery.services.DBPhotoService;
-
 import com.photogallery.photo_gallery.services.DBPhotoService;
 import com.photogallery.photo_gallery.services.InitPhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-//import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
 
@@ -28,8 +27,10 @@ public class PhotosController {
     public PhotosController() {
     }
 
+
     @RequestMapping("/")
     public String init() {
+        //initialize database with photo-objects from given url
         deleteAll();
         Photo[] photos = initPhotoService.init();
         Arrays.stream(photos).forEach(this::save);
@@ -39,10 +40,21 @@ public class PhotosController {
 
     @RequestMapping("/index")
     public String listPhotos(Model model) {
+        //show photo parameters stored in database
         model.addAttribute("photos", dbPhotoService.getAll());
         List<Integer> album_options = dbPhotoService.getAlbumList();
         model.addAttribute("album_options", album_options);
         return "index";
+    }
+
+    @ResponseBody
+    @GetMapping("/files/{filename:.+}")
+    public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
+        //
+
+        Resource file = dbPhotoService.loadAsResource(initPhotoService.load(filename));
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
 
     @RequestMapping("/deleteAll")
@@ -96,7 +108,7 @@ public class PhotosController {
     }
 
     @RequestMapping("/download/{id}")
-    public void downloadPhotoById(@PathVariable(name = "id") int id){
+    public void downloadPhotoById(@PathVariable(name = "id") int id) {
 
     }
 
